@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App de Sorteio de Times</title>
     <!-- Importando Vue via CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+
         .container {
             max-width: 600px;
             margin: 0 auto;
         }
-        input, button {
+
+        input,
+        button {
             padding: 8px 12px;
             margin: 5px;
             font-size: 14px;
         }
+
         .player-list {
             margin-top: 15px;
         }
+
         .team-list {
             margin-top: 20px;
         }
     </style>
 </head>
+
 <body>
 
     <div id="app" class="container">
@@ -57,7 +64,7 @@
             <h3>Times:</h3>
             <ul>
                 <li v-for="(team, index) in teams" :key="index">
-                    <strong>Time {{ index + 1 }}:</strong> {{ team.join(', ') }}
+                    <strong>{{ team.name }}:</strong> {{ team.players.join(', ') }}
                 </li>
             </ul>
         </div>
@@ -69,85 +76,93 @@
             <h3>Times Sorteados:</h3>
             <ul>
                 <li v-for="(team, index) in drawnTeams" :key="index">
-                    <strong>Time {{ index + 1 }}:</strong> {{ team.join(', ') }}
+                    <strong>{{ team.name }}:</strong> {{ team.players.join(', ') }}
                 </li>
             </ul>
         </div>
     </div>
 
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                numPlayers: 0,
-                playerName: '',
-                players: [],
-                teams: [],
-                drawnTeams: []
-            },
-            created() {
-                // Recupera os dados do localStorage, se existirem
-                const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
-                const savedTeams = JSON.parse(localStorage.getItem('teams')) || [];
-                this.players = savedPlayers;
-                this.teams = savedTeams;
-            },
-            watch: {
-                players: {
-                    handler() {
-                        // Persiste jogadores no localStorage
-                        localStorage.setItem('players', JSON.stringify(this.players));
-                    },
-                    deep: true
-                },
-                teams: {
-                    handler() {
-                        // Persiste times no localStorage
-                        localStorage.setItem('teams', JSON.stringify(this.teams));
-                    },
-                    deep: true
-                }
-            },
-            methods: {
-                addPlayer() {
-                    if (this.playerName.trim() && this.players.length < 100) {
-                        this.players.push(this.playerName.trim());
-                        this.playerName = '';
-                        this.$nextTick(() => {
-                            // Foca no campo de nome do jogador após adicionar
-                            this.$refs.playerNameInput.focus();
-                        });
-                    }
-                },
-                createTeams() {
-                    this.teams = [];
-                    const numPlayersPerTeam = parseInt(this.numPlayers);
+        const { createApp, ref, watch, onMounted } = Vue;
 
-                    if (numPlayersPerTeam && this.players.length >= numPlayersPerTeam) {
-                        let shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
-                        while (shuffledPlayers.length) {
-                            this.teams.push(shuffledPlayers.splice(0, numPlayersPerTeam));
+        createApp({
+            setup() {
+                const numPlayers = ref(0);
+                const playerName = ref('');
+                const players = ref([]);
+                const teams = ref([]);
+                const drawnTeams = ref([]);
+
+                // Recupera os dados do localStorage, se existirem
+                onMounted(() => {
+                    const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
+                    const savedTeams = JSON.parse(localStorage.getItem('teams')) || [];
+                    players.value = savedPlayers;
+                    teams.value = savedTeams;
+                });
+
+                // Watchers para salvar no localStorage
+                watch(players, (newPlayers) => {
+                    localStorage.setItem('players', JSON.stringify(newPlayers));
+                }, { deep: true });
+
+                watch(teams, (newTeams) => {
+                    localStorage.setItem('teams', JSON.stringify(newTeams));
+                }, { deep: true });
+
+                const addPlayer = () => {
+                    if (playerName.value.trim() && players.value.length < 100) {
+                        players.value.push(playerName.value.trim());
+                        playerName.value = '';
+                    }
+                };
+
+                const createTeams = () => {
+                    teams.value = [];
+                    const numPlayersPerTeam = parseInt(numPlayers.value);
+
+                    if (numPlayersPerTeam && players.value.length >= numPlayersPerTeam) {
+                        let shuffledPlayers = [...players.value].sort(() => Math.random() - 0.5);
+                        let teamCount = Math.ceil(players.value.length / numPlayersPerTeam);
+
+                        for (let i = 0; i < teamCount; i++) {
+                            let teamName = `Time ${i + 1}`;
+                            let teamPlayers = shuffledPlayers.splice(0, numPlayersPerTeam);
+                            teams.value.push({ name: teamName, players: teamPlayers });
                         }
                     } else {
                         alert('Número de jogadores insuficiente ou inválido.');
                     }
-                },
-                drawTwoTeams() {
-                    if (this.teams.length >= 2) {
+                };
+
+                const drawTwoTeams = () => {
+                    if (teams.value.length >= 2) {
                         const drawn = [];
                         for (let i = 0; i < 2; i++) {
-                            const randomIndex = Math.floor(Math.random() * this.teams.length);
-                            drawn.push(this.teams[randomIndex]);
-                            this.teams.splice(randomIndex, 1);
+                            const randomIndex = Math.floor(Math.random() * teams.value.length);
+                            drawn.push(teams.value[randomIndex]);
+                            teams.value.splice(randomIndex, 1);
                         }
-                        this.drawnTeams = drawn;
+                        drawnTeams.value = drawn;
                     } else {
                         alert('Não há times suficientes para sortear.');
                     }
-                }
+                };
+
+                return {
+                    numPlayers,
+                    playerName,
+                    players,
+                    teams,
+                    drawnTeams,
+                    addPlayer,
+                    createTeams,
+                    drawTwoTeams
+                };
             }
-        });
+        }).mount('#app');
     </script>
 
 </body>
+
 </html>
