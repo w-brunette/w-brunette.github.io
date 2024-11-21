@@ -55,7 +55,8 @@
         </div>
 
         <!-- Lista de times -->
-        <button @click="createTeams" class="btn btn-success mb-3" :disabled="!(numPlayers > 0 && players.length > 0 && players.length > numPlayers)">Sortear Times</button>
+        <button @click="createTeams" class="btn btn-success mb-3"
+            :disabled="!(numPlayers > 0 && players.length > 0 && players.length > numPlayers)">Sortear Times</button>
         <div class="team-list mb-4" v-if="teams.length > 0">
             <h3>Times:</h3>
             <table class="table table-bordered table-striped">
@@ -76,7 +77,8 @@
         </div>
 
         <!-- Times sorteados -->
-        <button @click="drawTwoTeams" class="btn btn-warning mb-3" v-if="teams.length > 0 && drawnTeams.length == 0">Sortear primeiro
+        <button @click="drawTwoTeams" class="btn btn-warning mb-3"
+            v-if="teams.length > 0 && drawnTeams.length == 0">Sortear primeiro
             jogo</button>
         <div class="team-list" v-if="teams.length > 0 && drawnTeams.length > 0">
             <h3>Primeiro jogo:</h3>
@@ -193,7 +195,21 @@
                     localStorage.removeItem('players');
                     localStorage.removeItem('teams');
                 };
-
+                // Função para carregar jogadores de uma URL externa
+                const loadPlayersFromUrl = async () => {
+                    const url = "https://github.com/w-brunette/jogadores.json"; // Substitua pela URL do seu JSON
+                    try {
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error('Falha ao carregar jogadores');
+                        }
+                        const data = await response.json();
+                        players.value = data.players || [];
+                    } catch (error) {
+                        alert('Erro ao carregar jogadores: ' + error.message);
+                    }
+                };
+                
                 return {
                     numPlayers,
                     playerName,
@@ -203,6 +219,7 @@
                     addPlayer,
                     createTeams,
                     drawTwoTeams,
+                    loadPlayersFromUrl,
                     resetArrays,  // Expor a função de reset
                     playerInput, // Expor a referência do input
                     removePlayer // Expor a função de remover jogador
