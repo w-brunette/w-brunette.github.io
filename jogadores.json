@@ -1,9 +1,11 @@
-[
-    {"nome": "Will"},
-    {"nome": "Brayho"},
-    {"nome": "Tyago Clemente"},
-    {"nome": "Thiago"},
-    {"nome": "Cassio"},
-    {"nome": "Bruno"},
-    {"nome": "Pedro"}
-]
+{
+  "players": [
+    { "name": "Will" },
+    { "name": "Brayho" },
+    { "name": "Tyago Clemente" },
+    { "name": "Thiago" },
+    { "name": "Cassio" },
+    { "name": "Bruno" },
+    { "name": "Pedro" }
+  ]
+}
