@@ -85,6 +85,9 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Botão para redefinir os arrays -->
+        <button @click="resetArrays" class="btn btn-danger mt-3">Redefinir Todos os Dados</button>
     </div>
 
     <script>
@@ -127,6 +130,7 @@
                         playerInput.value.focus();
                     }
                 };
+
                 const createTeams = () => {
                     teams.value = [];
                     const numPlayersPerTeam = parseInt(numPlayers.value);
@@ -164,6 +168,15 @@
                     }
                 };
 
+                // Função para redefinir os arrays
+                const resetArrays = () => {
+                    players.value = [];
+                    teams.value = [];
+                    drawnTeams.value = [];
+                    localStorage.removeItem('players');
+                    localStorage.removeItem('teams');
+                };
+
                 return {
                     numPlayers,
                     playerName,
@@ -173,6 +186,7 @@
                     addPlayer,
                     createTeams,
                     drawTwoTeams,
+                    resetArrays,  // Expor a função de reset
                     playerInput // Expor a referência do input
                 };
             }
