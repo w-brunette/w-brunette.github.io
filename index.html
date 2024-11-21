@@ -14,11 +14,12 @@
 
     <div id="app" class="container mt-4">
         <h1 class="text-center">Organizador de Times</h1>
-       
+
         <!-- Formulário para adicionar jogadores -->
         <div class="mb-3">
             <label for="playerName" class="form-label">Nome do jogador:</label>
-            <input v-model="playerName" id="playerName" type="text" class="form-control" @keyup.enter="addPlayer" ref="playerInput" />
+            <input v-model="playerName" id="playerName" type="text" class="form-control" @keyup.enter="addPlayer"
+                ref="playerInput" />
         </div>
 
         <button @click="addPlayer" class="btn btn-primary mb-3">Adicionar Jogador</button>
@@ -62,7 +63,8 @@
                 <tbody>
                     <tr v-for="(team, index) in teams" :key="index">
                         <td>{{ team.name }}</td>
-                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores' }}</td>
+                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores'
+                            }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -70,7 +72,7 @@
 
         <!-- Times sorteados -->
         <button @click="drawTwoTeams" class="btn btn-warning mb-3">Sortear primeiro jogo</button>
-        <div v-if="drawnTeams.length > 0" class="team-list">
+        <div class="team-list">
             <h3>Primeiro jogo:</h3>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -78,7 +80,7 @@
                         <th>Time</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="drawnTeams.length > 0">
                     <tr v-for="(team, index) in drawnTeams" :key="index">
                         <td>{{ team.name }}</td>
                     </tr>
@@ -87,9 +89,7 @@
         </div>
 
         <!-- Botão para redefinir os arrays -->
-         <div class="col-4 offset-4">
-             <button @click="resetArrays" class="btn btn-danger mt-3">Redefinir Todos os Dados</button>
-        </div>
+        <button @click="resetArrays" class="btn btn-danger mt-3">Redefinir Todos os Dados</button>
     </div>
 
     <script>
