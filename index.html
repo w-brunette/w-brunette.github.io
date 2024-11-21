@@ -25,7 +25,7 @@
         <button @click="addPlayer" class="btn btn-primary mb-3">Adicionar Jogador</button>
 
         <!-- Lista de jogadores -->
-        <div class="player-list mb-4">
+        <div class="player-list mb-4" v-if="players.length > 0">
             <h3>Jogadores:</h3>
             <table class="table table-bordered table-striped">
                 <thead>
