@@ -49,6 +49,7 @@
         </div>
 
         <!-- Lista de times -->
+        <button @click="createTeams" class="btn btn-success mb-3">Sortear Times</button>
         <div class="team-list mb-4">
             <h3>Times:</h3>
             <table class="table table-bordered table-striped">
@@ -67,11 +68,8 @@
             </table>
         </div>
 
-        <!-- Botões para sortear times -->
-        <button @click="createTeams" class="btn btn-success mb-3">Sortear Times</button>
-        <button @click="drawTwoTeams" class="btn btn-warning mb-3">Sortear Dois Times</button>
-
         <!-- Times sorteados -->
+        <button @click="drawTwoTeams" class="btn btn-warning mb-3">Sortear Dois Times</button>
         <div v-if="drawnTeams.length > 0" class="team-list">
             <h3>Times Sorteados:</h3>
             <table class="table table-bordered table-striped">
