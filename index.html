@@ -14,8 +14,7 @@
 
     <div id="app" class="container mt-4">
         <h1 class="text-center">Organizador de Times</h1>
-        <button @click="resetAll" class="btn btn-warning mb-3">Sortear Dois Times</button>
-        
+       
         <!-- Formulário para adicionar jogadores -->
         <div class="mb-3">
             <label for="playerName" class="form-label">Nome do jogador:</label>
@@ -128,12 +127,6 @@
                         playerInput.value.focus();
                     }
                 };
-                const resetAll = () => {
-                    players.value = []
-                    teams.value = []
-                    drawnTeams.value = []
-                }
-
                 const createTeams = () => {
                     teams.value = [];
                     const numPlayersPerTeam = parseInt(numPlayers.value);
