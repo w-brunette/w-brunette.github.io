@@ -44,14 +44,14 @@
         </div>
 
         <!-- Definição do número de jogadores por time -->
-        <div class="mb-3">
+        <div class="mb-3" v-if="players.length > 0">
             <label for="numPlayers" class="form-label">Número de jogadores por time:</label>
             <input v-model="numPlayers" id="numPlayers" type="number" min="1" class="form-control" />
         </div>
 
         <!-- Lista de times -->
-        <button @click="createTeams" class="btn btn-success mb-3">Sortear Times</button>
-        <div class="team-list mb-4">
+        <button @click="createTeams" class="btn btn-success mb-3" v-if="players.length > 0">Sortear Times</button>
+        <div class="team-list mb-4" v-if="players.length > 0">
             <h3>Times:</h3>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -71,8 +71,9 @@
         </div>
 
         <!-- Times sorteados -->
-        <button @click="drawTwoTeams" class="btn btn-warning mb-3">Sortear primeiro jogo</button>
-        <div class="team-list">
+        <button @click="drawTwoTeams" class="btn btn-warning mb-3" v-if="teams.length > 0">Sortear primeiro
+            jogo</button>
+        <div class="team-list" v-if="teams.length > 0 && drawnTeams.length > 0">
             <h3>Primeiro jogo:</h3>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -80,7 +81,7 @@
                         <th>Time</th>
                     </tr>
                 </thead>
-                <tbody v-if="drawnTeams.length > 0">
+                <tbody>
                     <tr v-for="(team, index) in drawnTeams" :key="index">
                         <td>{{ team.name }}</td>
                     </tr>
@@ -89,7 +90,10 @@
         </div>
 
         <!-- Botão para redefinir os arrays -->
-        <button @click="resetArrays" class="btn btn-danger mt-3">Redefinir Todos os Dados</button>
+        <div class="row col-3 offset-9">
+            <button @click="resetArrays" class="btn btn-danger mt-3" v-if="players.length > 0">Redefinir Todos os
+                Dados</button>
+        </div>
     </div>
 
     <script>
