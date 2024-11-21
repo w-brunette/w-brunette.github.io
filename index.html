@@ -14,11 +14,11 @@
 
     <div id="app" class="container mt-4">
         <h1 class="text-center">Organizador de Times</h1>
-
+        
         <!-- Formulário para adicionar jogadores -->
         <div class="mb-3">
             <label for="playerName" class="form-label">Nome do jogador:</label>
-            <input v-model="playerName" id="playerName" type="text" class="form-control" @keyup.enter="addPlayer" />
+            <input v-model="playerName" id="playerName" type="text" class="form-control" @keyup.enter="addPlayer" ref="playerInput" />
         </div>
 
         <button @click="addPlayer" class="btn btn-primary mb-3">Adicionar Jogador</button>
@@ -49,7 +49,6 @@
         </div>
 
         <!-- Lista de times -->
-        <button @click="createTeams" class="btn btn-success mb-3">Sortear Times</button>
         <div class="team-list mb-4">
             <h3>Times:</h3>
             <table class="table table-bordered table-striped">
@@ -62,19 +61,19 @@
                 <tbody>
                     <tr v-for="(team, index) in teams" :key="index">
                         <td>{{ team.name }}</td>
-                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores'
-                            }}</td>
+                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores' }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Botões para sortear times -->
-        <button @click="drawTwoTeams" class="btn btn-warning mb-3">Sortear primeiro jogo</button>
+        <button @click="createTeams" class="btn btn-success mb-3">Sortear Times</button>
+        <button @click="drawTwoTeams" class="btn btn-warning mb-3">Sortear Dois Times</button>
 
         <!-- Times sorteados -->
         <div v-if="drawnTeams.length > 0" class="team-list">
-            <h3>Quem ira começar jogando:</h3>
+            <h3>Times Sorteados:</h3>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -101,6 +100,9 @@
                 const teams = ref([]);
                 const drawnTeams = ref([]);
 
+                // Referência para o input de nome do jogador
+                const playerInput = ref(null);
+
                 // Recupera os dados do localStorage, se existirem
                 onMounted(() => {
                     const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
@@ -122,6 +124,9 @@
                     if (playerName.value.trim() && players.value.length < 100) {
                         players.value.push(playerName.value.trim());
                         playerName.value = '';
+
+                        // Coloca o foco novamente no input após adicionar o jogador
+                        playerInput.value.focus();
                     }
                 };
 
@@ -170,7 +175,8 @@
                     drawnTeams,
                     addPlayer,
                     createTeams,
-                    drawTwoTeams
+                    drawTwoTeams,
+                    playerInput // Expor a referência do input
                 };
             }
         }).mount('#app');
