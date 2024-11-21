@@ -32,12 +32,17 @@
                     <tr>
                         <th>#</th>
                         <th>Jogador</th>
+                        <th>Ações</th> <!-- Coluna para os botões de ação -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(player, index) in players" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ player }}</td>
+                        <td>
+                            <!-- Botão para excluir o jogador -->
+                            <button @click="removePlayer(index)" class="btn btn-danger btn-sm">Excluir</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -50,7 +55,7 @@
         </div>
 
         <!-- Lista de times -->
-        <button @click="createTeams" class="btn btn-success mb-3" :disabled="players.length > 0 && numPlayers > players.length">Sortear Times</button>
+        <button @click="createTeams" class="btn btn-success mb-3" :disabled="!(numPlayers > 0 && players.length > 0 && players.length > numPlayers)">Sortear Times</button>
         <div class="team-list mb-4" v-if="teams.length > 0">
             <h3>Times:</h3>
             <table class="table table-bordered table-striped">
@@ -174,6 +179,11 @@
                     }
                 };
 
+                // Função para remover jogador da lista
+                const removePlayer = (index) => {
+                    players.value.splice(index, 1);
+                };
+
                 // Função para redefinir os arrays
                 const resetArrays = () => {
                     players.value = [];
@@ -193,7 +203,8 @@
                     createTeams,
                     drawTwoTeams,
                     resetArrays,  // Expor a função de reset
-                    playerInput // Expor a referência do input
+                    playerInput, // Expor a referência do input
+                    removePlayer // Expor a função de remover jogador
                 };
             }
         }).mount('#app');
