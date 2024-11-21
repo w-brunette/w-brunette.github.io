@@ -1,11 +1,26 @@
 {
   "players": [
-    { "name": "Will" },
+    { "name": "Márcio" },
     { "name": "Brayho" },
-    { "name": "Tyago Clemente" },
-    { "name": "Thiago" },
-    { "name": "Cassio" },
+    { "name": "Quepe" },
+    { "name": "Pedro" },
+    { "name": "Lucca" },
     { "name": "Bruno" },
-    { "name": "Pedro" }
+    { "name": "Ricardo" },
+    { "name": "Jefferson" },
+    { "name": "Artur" },
+    { "name": "Joel" },
+    { "name": "Davi" },
+    { "name": "Tiago Clemente" },
+    { "name": "Thyago" },
+    { "name": "Luciano Israel" },
+    { "name": "Vitor" },
+    { "name": "Cassio" },
+    { "name": "Gustavo" },
+    { "name": "Douglas" },
+    { "name": "Ayann" },
+    { "name": "Will" },
+    { "name": "Cicero" },
+    { "name": "Souza" }
   ]
 }
