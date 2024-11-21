@@ -77,26 +77,6 @@
             </table>
         </div>
 
-        <!-- Times sorteados -->
-        <button @click="drawTwoTeams" class="btn btn-warning mb-3"
-            v-if="teams.length > 0 && drawnTeams.length == 0">Sortear primeiro
-            jogo</button>
-        <div class="team-list" v-if="teams.length > 0 && drawnTeams.length > 0">
-            <h3>Primeiro jogo:</h3>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(team, index) in drawnTeams" :key="index">
-                        <td>{{ team.name }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
         <!-- Botão para redefinir os arrays -->
         <div class="row">
             <button @click="resetArrays" class="btn btn-danger mt-3" v-if="players.length > 0">Redefinir Todos os
@@ -113,7 +93,6 @@
                 const playerName = ref('');
                 const players = ref([]);
                 const teams = ref([]);
-                const drawnTeams = ref([]);
 
                 // Referência para o input de nome do jogador
                 const playerInput = ref(null);
@@ -148,7 +127,6 @@
 
                 const createTeams = () => {
                     teams.value = [];
-                    drawnTeams.value = [];
                     const numPlayersPerTeam = parseInt(numPlayers.value);
 
                     if (numPlayersPerTeam && players.value.length >= numPlayersPerTeam) {
@@ -164,26 +142,6 @@
                         alert('Número de jogadores insuficiente ou inválido.');
                     }
                 };
-
-                const drawTwoTeams = () => {
-                    if (teams.value.length >= 2) {
-                        const drawn = [];
-                        // Enquanto não tivermos 2 times distintos
-                        while (drawn.length < 2) {
-                            const randomIndex = Math.floor(Math.random() * teams.value.length);
-                            const drawnTeam = teams.value[randomIndex];
-
-                            // Verificar se o time já foi sorteado
-                            if (!drawn.some(team => team.name === drawnTeam.name)) {
-                                drawn.push({ name: drawnTeam.name });
-                            }
-                        }
-                        drawnTeams.value = drawn;
-                    } else {
-                        alert('Não há times suficientes para sortear.');
-                    }
-                };
-
                 // Função para remover jogador da lista
                 const removePlayer = (index) => {
                     players.value.splice(index, 1);
@@ -193,7 +151,6 @@
                 const resetArrays = async () => {
                     players.value = [];
                     teams.value = [];
-                    drawnTeams.value = [];
                     localStorage.removeItem('players');
                     localStorage.removeItem('teams');
                     await loadPlayersFromUrl();
@@ -226,7 +183,6 @@
                     playerName,
                     players,
                     teams,
-                    drawnTeams,
                     addPlayer,
                     createTeams,
                     drawTwoTeams,
