@@ -39,12 +39,6 @@
 
     <div id="app" class="container">
         <h1>Organizador de Times</h1>
-
-        <div>
-            <label for="numPlayers">Número de jogadores por time:</label>
-            <input v-model="numPlayers" id="numPlayers" type="number" min="1" />
-        </div>
-
         <div>
             <label for="playerName">Nome do jogador:</label>
             <input v-model="playerName" id="playerName" type="text" @keyup.enter="addPlayer" />
@@ -59,6 +53,11 @@
                 </li>
             </ul>
         </div>
+        <div>
+            <label for="numPlayers">Número de jogadores por time:</label>
+            <input v-model="numPlayers" id="numPlayers" type="number" min="1" />
+        </div>
+
 
         <div class="team-list">
             <h3>Times:</h3>
@@ -140,8 +139,7 @@
                         const drawn = [];
                         for (let i = 0; i < 2; i++) {
                             const randomIndex = Math.floor(Math.random() * teams.value.length);
-                            drawn.push(teams.value[randomIndex]);
-                            teams.value.splice(randomIndex, 1);
+                            drawn.push({name: teams.value[randomIndex].name});
                         }
                         drawnTeams.value = drawn;
                     } else {
