@@ -32,14 +32,14 @@
                     <tr>
                         <th>#</th>
                         <th>Jogador</th>
-                        <th>Ações</th> <!-- Coluna para os botões de ação -->
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(player, index) in players" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ player }}</td>
-                        <td>
+                        <td class="col-2">{{ index + 1 }}</td>
+                        <td class="col-6">{{ player.name }}</td>
+                        <td class="col-auto text-center">
                             <!-- Botão para excluir o jogador -->
                             <button @click="removePlayer(index)" class="btn btn-danger btn-sm">Excluir</button>
                         </td>
@@ -69,7 +69,7 @@
                 <tbody>
                     <tr v-for="(team, index) in teams" :key="index">
                         <td>{{ team.name }}</td>
-                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores'
+                        <td>{{ team.players && Array.isArray(team.players) ? team.players.map(p => p.name).join(', ') : 'Sem jogadores'
                             }}</td>
                     </tr>
                 </tbody>
@@ -118,11 +118,12 @@
                 const playerInput = ref(null);
 
                 // Recupera os dados do localStorage, se existirem
-                onMounted(() => {
+                onMounted(async () => {
                     const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
                     const savedTeams = JSON.parse(localStorage.getItem('teams')) || [];
                     players.value = savedPlayers;
                     teams.value = savedTeams;
+                    await loadPlayersFromUrl();
                 });
 
                 // Watchers para salvar no localStorage
@@ -136,7 +137,7 @@
 
                 const addPlayer = () => {
                     if (playerName.value.trim() && players.value.length < 100) {
-                        players.value.push(playerName.value.trim());
+                        players.value.push({ name: playerName.value.trim() });
                         playerName.value = '';
 
                         // Coloca o foco novamente no input após adicionar o jogador
@@ -188,16 +189,17 @@
                 };
 
                 // Função para redefinir os arrays
-                const resetArrays = () => {
+                const resetArrays = async () => {
                     players.value = [];
                     teams.value = [];
                     drawnTeams.value = [];
                     localStorage.removeItem('players');
                     localStorage.removeItem('teams');
+                    await loadPlayersFromUrl();
                 };
                 // Função para carregar jogadores de uma URL externa
                 const loadPlayersFromUrl = async () => {
-                    const url = "https://github.com/w-brunette/w-brunette.github.io/blob/main/jogadores.json"; // Substitua pela URL do seu JSON
+                    const url = "https://w-brunette.github.io/jogadores.json"; // Substitua pela URL do seu JSON
                     try {
                         const response = await fetch(url);
                         if (!response.ok) {
@@ -209,7 +211,7 @@
                         alert('Erro ao carregar jogadores: ' + error.message);
                     }
                 };
-                
+
                 return {
                     numPlayers,
                     playerName,
