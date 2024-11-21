@@ -14,14 +14,11 @@
 
     <div id="app" class="container mt-4">
         <h1 class="text-center">Organizador de Times</h1>
-        <!-- Botão para redefinir os arrays -->
-        <button @click="resetArrays" class="btn btn-danger mt-3">Redefinir Todos os Dados</button>
-
+       
         <!-- Formulário para adicionar jogadores -->
         <div class="mb-3">
             <label for="playerName" class="form-label">Nome do jogador:</label>
-            <input v-model="playerName" id="playerName" type="text" class="form-control" @keyup.enter="addPlayer"
-                ref="playerInput" />
+            <input v-model="playerName" id="playerName" type="text" class="form-control" @keyup.enter="addPlayer" ref="playerInput" />
         </div>
 
         <button @click="addPlayer" class="btn btn-primary mb-3">Adicionar Jogador</button>
@@ -65,8 +62,7 @@
                 <tbody>
                     <tr v-for="(team, index) in teams" :key="index">
                         <td>{{ team.name }}</td>
-                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores'
-                            }}</td>
+                        <td>{{ team.players && Array.isArray(team.players) ? team.players.join(', ') : 'Sem jogadores' }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -90,6 +86,10 @@
             </table>
         </div>
 
+        <!-- Botão para redefinir os arrays -->
+         <div>
+             <button @click="resetArrays" class="btn btn-danger mt-3">Redefinir Todos os Dados</button>
+        </div>
     </div>
 
     <script>
