@@ -64,7 +64,7 @@
             <h3>Times:</h3>
             <ul>
                 <li v-for="(team, index) in teams" :key="index">
-                    <strong>{{ team.name }}:</strong> {{ team.players.join(', ') }}
+                    <strong>{{ team.name }}:</strong> {{ team.players?.join(', ') }}
                 </li>
             </ul>
         </div>
