@@ -50,7 +50,7 @@
         </div>
 
         <!-- Lista de times -->
-        <button @click="createTeams" class="btn btn-success mb-3" :disabled="players.length > 0 && numPlayers > players.length">Criar times</button>
+        <button @click="createTeams" class="btn btn-success mb-3" :disabled="players.length > 0 && numPlayers > players.length">Sortear Times</button>
         <div class="team-list mb-4" v-if="teams.length > 0">
             <h3>Times:</h3>
             <table class="table table-bordered table-striped">
