@@ -1,1 +1,153 @@
-<html>hello</html>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Sorteio de Times</title>
+    <!-- Importando Vue via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, button {
+            padding: 8px 12px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .player-list {
+            margin-top: 15px;
+        }
+        .team-list {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="container">
+        <h1>Organizador de Times</h1>
+
+        <div>
+            <label for="numPlayers">Número de jogadores por time:</label>
+            <input v-model="numPlayers" id="numPlayers" type="number" min="1" />
+        </div>
+
+        <div>
+            <label for="playerName">Nome do jogador:</label>
+            <input v-model="playerName" id="playerName" type="text" @keyup.enter="addPlayer" />
+            <button @click="addPlayer">Adicionar Jogador</button>
+        </div>
+
+        <div class="player-list">
+            <h3>Jogadores:</h3>
+            <ul>
+                <li v-for="(player, index) in players" :key="index">
+                    {{ player }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="team-list">
+            <h3>Times:</h3>
+            <ul>
+                <li v-for="(team, index) in teams" :key="index">
+                    <strong>Time {{ index + 1 }}:</strong> {{ team.join(', ') }}
+                </li>
+            </ul>
+        </div>
+
+        <button @click="createTeams">Sortear Times</button>
+        <button @click="drawTwoTeams">Sortear Dois Times</button>
+
+        <div v-if="drawnTeams.length > 0" class="team-list">
+            <h3>Times Sorteados:</h3>
+            <ul>
+                <li v-for="(team, index) in drawnTeams" :key="index">
+                    <strong>Time {{ index + 1 }}:</strong> {{ team.join(', ') }}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                numPlayers: 0,
+                playerName: '',
+                players: [],
+                teams: [],
+                drawnTeams: []
+            },
+            created() {
+                // Recupera os dados do localStorage, se existirem
+                const savedPlayers = JSON.parse(localStorage.getItem('players')) || [];
+                const savedTeams = JSON.parse(localStorage.getItem('teams')) || [];
+                this.players = savedPlayers;
+                this.teams = savedTeams;
+            },
+            watch: {
+                players: {
+                    handler() {
+                        // Persiste jogadores no localStorage
+                        localStorage.setItem('players', JSON.stringify(this.players));
+                    },
+                    deep: true
+                },
+                teams: {
+                    handler() {
+                        // Persiste times no localStorage
+                        localStorage.setItem('teams', JSON.stringify(this.teams));
+                    },
+                    deep: true
+                }
+            },
+            methods: {
+                addPlayer() {
+                    if (this.playerName.trim() && this.players.length < 100) {
+                        this.players.push(this.playerName.trim());
+                        this.playerName = '';
+                        this.$nextTick(() => {
+                            // Foca no campo de nome do jogador após adicionar
+                            this.$refs.playerNameInput.focus();
+                        });
+                    }
+                },
+                createTeams() {
+                    this.teams = [];
+                    const numPlayersPerTeam = parseInt(this.numPlayers);
+
+                    if (numPlayersPerTeam && this.players.length >= numPlayersPerTeam) {
+                        let shuffledPlayers = [...this.players].sort(() => Math.random() - 0.5);
+                        while (shuffledPlayers.length) {
+                            this.teams.push(shuffledPlayers.splice(0, numPlayersPerTeam));
+                        }
+                    } else {
+                        alert('Número de jogadores insuficiente ou inválido.');
+                    }
+                },
+                drawTwoTeams() {
+                    if (this.teams.length >= 2) {
+                        const drawn = [];
+                        for (let i = 0; i < 2; i++) {
+                            const randomIndex = Math.floor(Math.random() * this.teams.length);
+                            drawn.push(this.teams[randomIndex]);
+                            this.teams.splice(randomIndex, 1);
+                        }
+                        this.drawnTeams = drawn;
+                    } else {
+                        alert('Não há times suficientes para sortear.');
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
