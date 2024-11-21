@@ -51,7 +51,7 @@
         <!-- Definição do número de jogadores por time -->
         <div class="mb-3" v-if="players.length > 0">
             <label for="numPlayers" class="form-label">Número de jogadores por time:</label>
-            <input v-model="numPlayers" id="numPlayers" type="number" min="1" class="form-control" />
+            <input v-model="numPlayers" id="numPlayers" type="number" min="1" class="form-control" disabled/>
         </div>
 
         <!-- Lista de times -->
@@ -89,7 +89,7 @@
 
         createApp({
             setup() {
-                const numPlayers = ref(0);
+                const numPlayers = ref(5);
                 const playerName = ref('');
                 const players = ref([]);
                 const teams = ref([]);
